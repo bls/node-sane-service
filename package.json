@@ -1,0 +1,35 @@
+{
+  "name": "@sane/service",
+  "version": "1.0.0",
+  "description": "A service interface, for typescript.",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "prepublish": "tslint src/*.ts && tsc",
+    "test": "mocha dist/test.js"
+  },
+  "files": [
+    "dist/index.js",
+    "dist/index.d.ts"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bls/node-sane-service.git"
+  },
+  "keywords": [
+    "promisify",
+    "fs"
+  ],
+  "author": "Blair Strang <blair.strang@gmail.com>",
+  "homepage": "https://github.com/bls/node-sane-service",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^2.2.4",
+    "tslint": "^3.2.1",
+    "typescript": "^1.7.5"
+  },
+  "dependencies": {
+    "@sane/promisify-listen": "^1.0.1",
+    "es6-promisify": "^3.0.0"
+  }
+}
