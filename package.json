@@ -29,7 +29,6 @@
     "typescript": "^1.7.5"
   },
   "dependencies": {
-    "@sane/promisify-listen": "^1.0.1",
-    "es6-promisify": "^3.0.0"
+    "@sane/promisify-listen": "^1.0.1"
   }
 }
