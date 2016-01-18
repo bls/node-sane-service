@@ -34,8 +34,7 @@ IService (just stop and start, no args, returning Promise<void>).
 Compatibility
 -------------
 
-* Requires Node >= 0.4
-* Works fine with JS, if using TypeScript, requires >= 1.5.0.
+* Requires Node >= v4.0.0
 
 Release
 -------
