@@ -7,6 +7,10 @@ export interface IService {
     stop(): Promise<void>;
 }
 
+/**
+ * Create a group of services. When you start and stop, all services in
+ * the group are started or stopped.
+ */
 export class ServiceGroup implements IService {
     services: IService[];
 
@@ -23,6 +27,9 @@ export class ServiceGroup implements IService {
     }
 }
 
+/**
+ * Wrap a net.Server into a service.
+ */
 export class Service implements IService {
     server: HasAsyncListen;
     options: ServerOptions;
@@ -39,3 +46,32 @@ export class Service implements IService {
     }
 }
 
+/**
+ * Run an async function over and over, as a service.
+ */
+export class LoopRunner implements IService {
+    runP: Promise<void> = null;
+    stopRequested: boolean = false;
+
+    constructor(public loopFn: () => Promise<void>) {
+        /* Empty */
+    }
+    async start(): Promise<void> {
+        if(this.runP === null) {
+            this.runP = this._run();
+        }
+    }
+    async stop(): Promise<void> {
+        if(this.runP !== null) {
+            this.stopRequested = true;
+            await this.runP;
+            this.runP = null;
+            this.stopRequested = false;
+        }
+    }
+    async _run(): Promise<void> {
+        while(!this.stopRequested) {
+            await this.loopFn();
+        }
+    }
+}
