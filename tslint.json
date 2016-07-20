@@ -48,12 +48,6 @@
     "triple-equals": [true,
       "allow-null-check"
     ],
-    "x__typedef": [true,
-      "catchClause",
-      "parameter",
-      "variableDeclarator",
-      "callSignature"
-    ],
     "typedef": [true,
       "indexSignature",
       "propertySignature"
