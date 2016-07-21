@@ -46,6 +46,16 @@ export class Service implements IService {
     }
 }
 
+
+/**
+ * Config for LoopRunner
+ */
+export interface LoopRunnerConfig {
+    onStart?: () => Promise<void>;
+    loopFn?: () => Promise<void>;
+    onStop?: () => Promise<void>;
+}
+
 /**
  * Run an async function over and over, as a service.
  */
@@ -53,25 +63,36 @@ export class LoopRunner implements IService {
     runP: Promise<void> = null;
     stopRequested: boolean = false;
 
-    constructor(public loopFn: () => Promise<void>) {
+    constructor(public config: LoopRunnerConfig) {
         /* Empty */
     }
+    /** Request service start, wait for it to happen. Not re-entrant. */
     async start(): Promise<void> {
-        if(this.runP === null) {
-            this.runP = this._run();
-        }
-    }
-    async stop(): Promise<void> {
         if(this.runP !== null) {
-            this.stopRequested = true;
-            await this.runP;
-            this.runP = null;
-            this.stopRequested = false;
+            return;
         }
+        if(this.config.onStart) {
+            await this.config.onStart();
+        }
+        this.runP = this._run();
     }
+    /** Request service stop, wait for it to happen. Not re-entrant. */
+    async stop(): Promise<void> {
+        if(this.runP === null) {
+            return;
+        }
+        this.stopRequested = true;
+        await this.runP;
+        if(this.config.onStop) {
+            await this.config.onStop();
+        }
+        this.runP = null;
+        this.stopRequested = false;
+    }
+    /** Run loop. @private */
     async _run(): Promise<void> {
         while(!this.stopRequested) {
-            await this.loopFn();
+            await this.config.loopFn();
         }
     }
 }
